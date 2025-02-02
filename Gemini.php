@@ -1,7 +1,7 @@
 <?php
 class Gemini {
     private $api_key;
-    private $api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
+    private $api_url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent";
 
     public function __construct($api_key) {
         $this->api_key = $api_key;

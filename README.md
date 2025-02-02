@@ -20,6 +20,15 @@ This project is a simple web-based chatbot application that utilizes the Google 
     *   Delete chat history to remove unwanted conversations.
 *   **Responsive Design:** Utilizes Tailwind CSS for a mobile-friendly and responsive interface.
 
+---
+
+## Demo Screenshots  
+
+| Guest Page | Chat Page | Conversation |  
+|------------|----------|-------------|  
+| ![Guest Page](screenshot/guestPage.jpg) | ![Chat Page](screenshot/chatPage.jpg) | ![Conversation](screenshot/conversation.jpg) |  
+---
+
 ## Technologies
 
 *   **Backend:**

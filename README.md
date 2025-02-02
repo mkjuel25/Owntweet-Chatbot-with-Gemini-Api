@@ -83,21 +83,3 @@ Use code with caution.
 This software is licensed to Jewel, the owner of [Owntweet](https://owntweet.com).
 All rights are reserved. No redistribution, modification, or commercial
 use of this software is allowed without explicit permission from the license holder.
-
-## Contributing
-
-Since this is a personal project and license is restricted, contributions are not accepted.
-content_copy
-download
-Use code with caution.
-
- tells GitHub that it's a Markdown file.
-
-Copy and Paste: Paste the entire content from the above text into your new README.md file.
-
-Commit Changes: Commit the README.md file to your repository.
-
-Preview: GitHub will automatically render the Markdown into nicely formatted documentation on your project's main page.
-
-This well-structured description will make your GitHub project much more accessible and informative for other developers.
-

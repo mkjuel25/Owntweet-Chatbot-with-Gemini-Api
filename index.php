@@ -63,8 +63,6 @@ if (isset($_SESSION['user_id'])) {
             </div>
         <!-- Chat Container -->
         <div id="chat-container" class="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
-            
-
             <?php foreach($messages as $msg): ?>
                 <div class="flex <?= ($msg['user_id'] == $_SESSION['user_id']) ? 'justify-end' : 'justify-start' ?> mb-4">
                     <div class="max-w-[90%] md:max-w-[70%]">
@@ -82,14 +80,9 @@ if (isset($_SESSION['user_id'])) {
                                      <i class='bx bx-copy'></i>
                                   </button>
                                <?php endif; ?> 
-                               
-                              
-                               
-                               
                         </div>
                     </div>
                 </div>
-                
                 
                 <!-- Duplicate demo message (added directly in HTML) -->
             <div class="flex justify-start mb-4">
@@ -105,7 +98,7 @@ if (isset($_SESSION['user_id'])) {
                        </div>
                     </div>
                      <div class="text-xs text-gray-400 mt-1 ">
-                          <?=  date('h:i A') ?>
+                          <?=  date('h:i A', strtotime($msg['created_at'])) ?>
                             <button onclick="copyMessage(this)" class="inline-block ml-2 text-gray-500 hover:text-gray-400">
                                   <i class='bx bx-copy'></i>
                            </button>
@@ -113,15 +106,7 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             </div>           
                                
-                               
-                
-                
-                
             <?php endforeach; ?>
-            
-            
-            
-            
             
         </div>
 

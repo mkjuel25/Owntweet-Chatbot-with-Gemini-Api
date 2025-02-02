@@ -287,29 +287,29 @@ if (isset($_SESSION['user_id'])) {
         });
 
         function copyMessage(button) {
-            const messageText = button.closest('.flex').querySelector('.message-content').textContent;
-            navigator.clipboard.writeText(messageText).then(() => {
-                // Optional: Show a visual indication of the copy action (e.g., a tooltip or a message)
-                console.log('Message copied!');
-            }, (err) => {
-                console.error('Failed to copy message: ', err);
-            });
-        }
+    const messageContent = button.closest('.flex').querySelector('.message-content');
+    const text = messageContent.textContent.trim(); // Remove extra spaces
+    navigator.clipboard.writeText(text).then(() => {
+        
+    }).catch(err => {
+        console.error('Failed to copy message: ', err);
+    });
+}
 
-        function copyAllChat() {
-            let allMessages = '';
-             chatContainer.querySelectorAll('.flex').forEach(messageDiv => {
-                   const textDiv = messageDiv.querySelector('.bg-blue-600, .bg-gray-700');
-                  if(textDiv) {
-                        allMessages += textDiv.textContent.trim() + "\n";
-                    }
-             });
-           navigator.clipboard.writeText(allMessages).then(() => {
-                console.log('All messages copied!');
-            }, (err) => {
-                console.error('Failed to copy all messages: ', err);
-            });
+function copyAllChat() {
+    let allMessages = '';
+    chatContainer.querySelectorAll('.flex').forEach(messageDiv => {
+        const textDiv = messageDiv.querySelector('.bg-blue-600, .bg-gray-700');
+        if (textDiv) {
+            allMessages += textDiv.textContent.trim() + "\n\n"; // Add clean text with proper spacing
         }
+    });
+    navigator.clipboard.writeText(allMessages.trim()).then(() => {
+        
+    }).catch(err => {
+        console.error('Failed to copy all messages: ', err);
+    });
+}
 
        async function deleteChatHistory() {
         if (confirm("Are you sure you want to delete all chat history?")) {

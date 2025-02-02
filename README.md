@@ -8,7 +8,7 @@ This project is a simple web-based chatbot application that utilizes the Google 
 
 | Guest Page | Chat Page | Chat Conversation |  
 |------------|----------|-------------|  
-| ![Guest Page](screenshot/guestPage.jpg) | ![Chat Page](screenshot/chatPage.jpg) | ![Conversation](screenshot/conversation.jpg) |  
+| ![Guest Page](screenshot/guestPage.jpg) | ![Chat Page](screenshot/chatPage.jpg) | ![Chat Conversation](screenshot/conversation.jpg) |  
 ---
 ## Features
 

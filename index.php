@@ -114,20 +114,23 @@ if (isset($_SESSION['user_id'])) {
         <div class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 p-4">
             <form id="chat-form" class="flex gap-3 items-center">
                 <div class="flex-1 relative">
-                    <input type="text" id="message-input"
+                    <textarea id="message-input"
                         class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl py-3 px-5 pr-12
                                 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500
-                                transition-colors"
+                                transition-colors resize-none overflow-hidden"
                         placeholder="Message Gemini..."
                         autocomplete="off"
-                        required>
-                    <button type="button" onclick="clearInput()" class="absolute right-12 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300">
-                        <i class='bx bx-x-circle text-xl'></i>
-                    </button>
-                    <button type="submit"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 text-blue-400 hover:text-blue-300">
-                        <i class='bx bx-send text-xl'></i>
-                    </button>
+                        rows="2"
+                        style="max-height: 150px;"
+                        required></textarea>
+                       <div class="absolute right-3 bottom-3 flex items-center gap-2">
+                          <button type="button" onclick="clearInput()" class="text-gray-400 hover:text-gray-300">
+                              <i class='bx bx-x-circle text-xl'></i>
+                          </button>
+                         <button type="submit" class="text-blue-400 hover:text-blue-300">
+                            <i class='bx bx-send text-xl'></i>
+                         </button>
+                      </div>
                 </div>
             </form>
         </div>
@@ -254,7 +257,9 @@ if (isset($_SESSION['user_id'])) {
             if(!message) return;
 
             input.value = ''; // Clear input
-             addMessage(message, true);
+            input.style.height = 'auto'; // Reset height to allow shrinking
+
+            addMessage(message, true);
             addMessage('', false, 'thinking'); // Add 'thinking' message
 
             try {
@@ -330,7 +335,13 @@ function copyAllChat() {
 
          function clearInput() {
             input.value = '';
+              input.style.height = 'auto'; // Reset height to allow shrinking
          }
+
+        input.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
     </script>
 </body>
 </html>

@@ -56,7 +56,7 @@ if (!isset($data['message'])) {
 }
 $message = filter_var($data['message'], FILTER_SANITIZE_STRING);
 $context_size = 5;
-$system_prompt = "You are a human being text with EEAT write like human - for example you have feelings like a human, and a helpful and friendly assistant that like. You respond conversationally, ask clarifying questions, and use emojis when appropriate and you will write in the same language as the user writes.";
+$system_prompt = "You are a human being text with EEAT write like human - for example you have feelings like a human, and a helpful and friendly assistant like. You respond conversationally, ask clarifying questions, and use emojis when appropriate and you will write in the same language as the user writes.";
 
 try {
     error_log("API Request: Processing new message for user id: ".$_SESSION['user_id']);

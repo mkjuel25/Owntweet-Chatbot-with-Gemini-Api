@@ -10,7 +10,7 @@ class Gemini {
     public function generateResponse($messages) {
       $prompt = "";
       foreach($messages as $message) {
-        $prompt .= $message['is_user'] ? "User: " : "AI: ";
+        $prompt .= $message['is_user'] ? "User: " : " ";
         $prompt .= $message['text']."\n";
       }
       

@@ -1,8 +1,8 @@
 <?php
 session_start();
 $host = "localhost";
-$dbname = "Owntweet_chatbot";
-$user = "chatbot";
+$dbname = "chatbot";
+$user = " ";
 $pass = "password";
 
 $gemini_api_key = "Gemini Api key";

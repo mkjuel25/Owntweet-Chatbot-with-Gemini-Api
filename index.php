@@ -164,7 +164,7 @@ if (isset($_SESSION['user_id'])) {
         @media (max-width: 768px) { /* Mobile styles */
             #chat-container {
                 margin-left: 0; /* Reset margin for small screens */
-                padding-top: 60px; /* Adjusted padding for fixed header */
+                padding-top: 80px; /* Adjusted padding for fixed header */
                 padding-bottom: 120px; /* Adjusted padding for fixed input area */
             }
              body.sidebar-open #chat-container {
@@ -237,7 +237,7 @@ if (isset($_SESSION['user_id'])) {
         }
 
         #chat-container {
-            padding-top: 60px; /* Adjust based on header height */
+            padding-top: 80px; /* Adjust based on header height */
             padding-bottom: 120px; /* Adjust based on input area height */
         }
 

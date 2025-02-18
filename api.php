@@ -58,13 +58,25 @@ if (!isset($data['message'])) {
 // $message = filter_var($data['message'], FILTER_SANITIZE_STRING);
 $message = $data['message'];
 $context_size = 10;
- 
-$system_prompt = "Must Important before you write: 
 
-You are a human and friendly person, writing system must Human 100% all the text, write in the same language as the user writes. Must focus human touch ouch write. Human thought & Reddit style."; 
+// Default system prompt
+$default_system_prompt = "Must Important before you write:
+
+You are a human and friendly person, writing system must Human 100% all the text, write in the same language as the user writes. Must focus human touch ouch write. Human thought & Reddit style.";
 
 try {
     error_log("API Request: Processing new message for user id: ".$_SESSION['user_id']);
+
+    // Fetch user's saved system prompt
+    $stmtPrompt = $pdo->prepare("SELECT system_prompt_text FROM saved_prompts WHERE user_id = ?");
+    $stmtPrompt->execute([$_SESSION['user_id']]);
+    $savedPromptResult = $stmtPrompt->fetch(PDO::FETCH_ASSOC);
+    $userSystemPrompt = $savedPromptResult ? $savedPromptResult['system_prompt_text'] : null;
+
+    // Use user's prompt if available, otherwise use default
+    $system_prompt_to_use = $userSystemPrompt ?: $default_system_prompt;
+
+
     // Fetch recent messages
     $stmt = $pdo->prepare("SELECT message, response FROM messages WHERE user_id = ? ORDER BY id DESC LIMIT " . $context_size);
       $stmt->execute([$_SESSION['user_id']]);
@@ -73,7 +85,7 @@ try {
 
     $messagesForGemini = [];
     //Add system prompt as context
-    $messagesForGemini[] = ['is_user' => false, 'text' => $system_prompt];
+    $messagesForGemini[] = ['is_user' => false, 'text' => $system_prompt_to_use]; // Use the selected system prompt
 
      foreach($recentMessages as $msg) {
         //User messages

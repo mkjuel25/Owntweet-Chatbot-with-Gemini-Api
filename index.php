@@ -165,7 +165,7 @@ if (isset($_SESSION['user_id'])) {
             #chat-container {
                 margin-left: 0; /* Reset margin for small screens */
                 padding-top: 80px; /* Adjusted padding for fixed header */
-                padding-bottom: 120px; /* Adjusted padding for fixed input area */
+                padding-bottom: 100px; /* Adjusted padding for fixed input area */
             }
              body.sidebar-open #chat-container {
                 margin-left: 0; /* No margin on mobile when sidebar is open, it overlays */
@@ -238,7 +238,7 @@ if (isset($_SESSION['user_id'])) {
 
         #chat-container {
             padding-top: 80px; /* Adjust based on header height */
-            padding-bottom: 120px; /* Adjust based on input area height */
+            padding-bottom: 100px; /* Adjust based on input area height */
         }
 
 

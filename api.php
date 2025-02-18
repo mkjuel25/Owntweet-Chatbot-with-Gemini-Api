@@ -54,10 +54,14 @@ if (!isset($data['message'])) {
     http_response_code(400);
     die(json_encode(['error' => 'No message received.']));
 }
-$message = filter_var($data['message'], FILTER_SANITIZE_STRING);
-$context_size = 5;
+
+// $message = filter_var($data['message'], FILTER_SANITIZE_STRING);
+$message = $data['message'];
+$context_size = 10;
+ 
 $system_prompt = "Must Important before you write: 
-You are a human and friendly person, writing system must Human 100% all the text, write in the same language as the user writes. "; 
+
+You are a human and friendly person, writing system must Human 100% all the text, write in the same language as the user writes. Must focus human touch ouch write. Human thought & Reddit style."; 
 
 try {
     error_log("API Request: Processing new message for user id: ".$_SESSION['user_id']);

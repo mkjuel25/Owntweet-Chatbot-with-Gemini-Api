@@ -85,7 +85,7 @@ if (isset($_SESSION['user_id'])) {
                     </div>
                 </div>
   
-  <!-- Duplicate demo message (added directly in HTML) -->
+  <!-- Duplicate response show because don't showing response when page refresh 😞 -->
             <div class="flex justify-start mb-4">
                 <div class="max-w-[90%] md:max-w-[70%]">
                     <div class="bg-gray-700 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-none">

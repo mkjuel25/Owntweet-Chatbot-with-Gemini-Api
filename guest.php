@@ -16,6 +16,7 @@ if (isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
     <style>
         @keyframes typing {
             0% { opacity: 0.4; transform: translateY(0); }
@@ -51,7 +52,7 @@ if (isset($_SESSION['user_id'])) {
     <div class="container mx-auto max-w-md w-full">
         <div class="form-card bg-gray-800/70 backdrop-blur-md rounded-3xl shadow-2xl p-6 sm:p-8 animate-fade-in">
             <h1 class="text-3xl font-bold mb-8 text-center text-white animate-pulse">
-                <i class='bx bxl-xing text-blue-500 align-middle'></i> <span class="align-middle">Gemini Chat</span>
+                <i class='bx bxl-xing text-blue-500 align-middle'></i> <span class="align-middle">Owntweet Chat</span>
             </h1>
 
             <?php if(isset($error)): ?>

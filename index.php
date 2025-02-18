@@ -143,22 +143,20 @@ if (isset($_SESSION['user_id'])) {
             messageDiv.className = 'message-animation';
             const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            let messageContentHTML = ''; // Changed variable name to clarify HTML context
-            let responseDiv = '';
-
+            let messageContentHTML = '';
             if (isUser) {
-                messageContentHTML = message; // Assign message to HTML variable
+                messageContentHTML = message;
             } else if (status === 'thinking') {
-                messageContentHTML = '<div class="typing-indicator"></div>'; // Placeholder for 'thinking'
+                messageContentHTML = '<div class="typing-indicator"></div>';
             } else {
-                messageContentHTML = '<div class="message-content">' + marked.parse(message) + '</div>'; // For AI response, use message-content div and marked.parse
+                messageContentHTML = '<div class="message-content">' + marked.parse(message) + '</div>'; // Apply marked.parse here
             }
 
             messageDiv.innerHTML = `
                 <div class="flex ${isUser ? 'justify-end' : 'justify-start'} mb-4">
                     <div class="max-w-[90%] md:max-w-[70%]">
                         <div class="${isUser ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100'}
-                            px-4 py-3 rounded-2xl ${isUser ? 'rounded-br-none' : 'rounded-bl-none'} message-container">  <!-- Added class message-container -->
+                            px-4 py-3 rounded-2xl ${isUser ? 'rounded-br-none' : 'rounded-bl-none'} message-container">
                         </div>
                         <div class="text-xs text-gray-400 mt-1 ${isUser ? 'text-right' : ''}">
                             ${timestamp}
@@ -170,21 +168,25 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             `;
 
-            // Set textContent for user messages to ensure plain text rendering
             if (isUser) {
-                messageDiv.querySelector('.message-container').textContent = messageContentHTML; // Use textContent for user message
+                messageDiv.querySelector('.message-container').textContent = messageContentHTML;
             } else {
-                messageDiv.querySelector('.message-container').innerHTML = messageContentHTML; // Use innerHTML for AI response (Markdown parsing)
+                messageDiv.querySelector('.message-container').innerHTML = messageContentHTML;
             }
 
 
             chatContainer.appendChild(messageDiv);
             messageDiv.scrollIntoView({ behavior: 'smooth' });
+
+            // Apply syntax highlighting after adding the message
             if (!isUser && status !== 'thinking') {
-                hljs.highlightAll();
+                messageDiv.querySelectorAll('pre code').forEach(el => {
+                    hljs.highlightElement(el);
+                });
             }
         }
-        // Show typing indicator
+
+         // Show typing indicator
          function showTypingIndicator() {
             const typingIndicator = document.createElement('div');
             typingIndicator.className = 'flex gap-1 px-4 py-3';
@@ -200,38 +202,16 @@ if (isset($_SESSION['user_id'])) {
           }
          }
 
-        function addMessageToChat(message, response, user_id, created_at) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message-animation';
-             const timestamp = created_at ? new Date(created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-            let responseDiv = '';
-            if(user_id != '<?=$_SESSION['user_id']?>'){
-                responseDiv = '<div class="message-content">' +  marked.parse(response) + '</div>';
-           }
-
-             messageDiv.innerHTML = `
-            <div class="flex ${user_id == '<?=$_SESSION['user_id']?>' ? 'justify-end' : 'justify-start'} mb-4">
-                <div class="max-w-[90%] md:max-w-[70%]">
-                    <div class="${user_id == '<?=$_SESSION['user_id']?>' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100'}
-                        px-4 py-3 rounded-2xl ${user_id == '<?=$_SESSION['user_id']?>' ? 'rounded-br-none' : 'rounded-bl-none'}">
-                           ${user_id == '<?=$_SESSION['user_id']?>' ? message : ''}
-                           ${responseDiv}
-                    </div>
-                      <div class="text-xs text-gray-400 mt-1 ${user_id == '<?=$_SESSION['user_id']?>' ? 'text-right' : ''}">
-                        ${timestamp}
-                          ${user_id !== '<?=$_SESSION['user_id']?>' ? `<button onclick="copyMessage(this)" class="inline-block ml-2 text-gray-500 hover:text-gray-400">
-                            <i class='bx bx-copy'></i>
-                         </button>` : ''}
-                    </div>
-                </div>
-            </div>
-         `;
-             chatContainer.appendChild(messageDiv);
-              messageDiv.scrollIntoView({ behavior: 'smooth' });
-           // Apply syntax highlighting
-             hljs.highlightAll();
+        function copyMessage(button) {
+            const messageContent = button.closest('.flex').querySelector('.message-content');
+            const text = messageContent.textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                // Optional: Provide user feedback (e.g., tooltip)
+            }).catch(err => {
+                console.error('Failed to copy message: ', err);
+            });
         }
+
 
         // Handle form submission
         form.addEventListener('submit', async (e) => {
@@ -243,7 +223,7 @@ if (isset($_SESSION['user_id'])) {
             input.style.height = 'auto'; // Reset height to allow shrinking
 
             addMessage(message, true);
-            addMessage('', false, 'thinking'); // Add 'thinking' message
+             addMessage('', false, 'thinking'); // Add 'thinking' message
 
             try {
                 const response = await fetch('api.php', {
@@ -253,7 +233,8 @@ if (isset($_SESSION['user_id'])) {
                     },
                     body: JSON.stringify({ message })
                 });
-                 if (!response.ok) {
+
+                   if (!response.ok) {
                         const lastMessage = chatContainer.lastElementChild;
                       lastMessage.querySelector('.bg-gray-700').innerHTML =
                         "Sorry, I'm having trouble responding right now. Please try again.";
@@ -264,43 +245,30 @@ if (isset($_SESSION['user_id'])) {
                 const lastMessage = chatContainer.lastElementChild;
 
             chatContainer.removeChild(lastMessage);
-             addMessage(data.response, false);
-
+             addMessage(data.response, false); // response show
             } catch (error) {
-                 console.error('Error:', error);
+                  console.error('Error:', error);
                     const lastMessage = chatContainer.lastElementChild;
                     lastMessage.querySelector('.bg-gray-700').innerHTML =
                     "Sorry, I'm having trouble responding right now. Please try again.";
             }
         });
 
-        function copyMessage(button) {
-    const messageContent = button.closest('.flex').querySelector('.message-content');
-    const text = messageContent.textContent.trim(); // Remove extra spaces
-    navigator.clipboard.writeText(text).then(() => {
-
-    }).catch(err => {
-        console.error('Failed to copy message: ', err);
-    });
-}
-
-
-       async function deleteChatHistory() {
-        if (confirm("Are you sure you want to delete all chat history?")) {
-            try {
-                const response = await fetch('api.php?delete_history=1', { method: 'DELETE' });
-                 if (response.ok) {
-                     chatContainer.innerHTML = ''; // Clear the chat container
-                     location.reload(); // Option reload page
-                      console.log('Chat history deleted.');
-                } else {
-                    console.error('Failed to delete chat history.');
-                 }
-             } catch (error) {
-                 console.error('Error deleting chat history:', error);
+        async function deleteChatHistory() {
+            if (confirm("Are you sure you want to delete all chat history?")) {
+                try {
+                    const response = await fetch('api.php?delete_history=1', { method: 'DELETE' });
+                    if (response.ok) {
+                        chatContainer.innerHTML = '';
+                        location.reload();
+                    } else {
+                        console.error('Failed to delete chat history.');
+                    }
+                } catch (error) {
+                    console.error('Error deleting chat history:', error);
+                }
             }
         }
-      }
 
          function clearInput() {
             input.value = '';
@@ -311,6 +279,15 @@ if (isset($_SESSION['user_id'])) {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
+
+        // initial highlight when page load
+         document.addEventListener('DOMContentLoaded', (event) => {
+             document.querySelectorAll('pre code').forEach(el => {
+                 hljs.highlightElement(el);
+             });
+              // Scroll to bottom after initial load
+              chatContainer.scrollTop = chatContainer.scrollHeight;
+         });
     </script>
 </body>
 </html>

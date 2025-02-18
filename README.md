@@ -4,6 +4,8 @@ Description:
 This is a fully open-source AI Chatbot project created by Jewel, with credit to Owntweet social.
 It utilizes the Google Gemini API to provide conversational responses within a web-based chat interface.
 
+#Demo- https://project.owntweet.com/chatbot/
+
 ### Screenshots
 
 | Screenshot 1 | Screenshot 2 | Screenshot 3 |

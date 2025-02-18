@@ -266,12 +266,12 @@ if (isset($_SESSION['user_id'])) {
                 <button id="sidebar-toggle" class="text-gray-400 hover:text-gray-300 mr-4 md:hidden">  <!-- Hidden on medium and up -->
                     <i class='bx bx-menu text-2xl'></i>
                 </button>
-                <h2 class="text-xl font-semibold text-white">Chat</h2>
+                <h2 class="text-xl font-semibold text-white">Conversation</h2>
             </div>
             <div class="space-x-3 flex items-center">
                 <a href="profile.php" title="Profile" class="text-gray-400 hover:text-gray-300 flex items-center">
                     <i class='bx bx-user-circle text-2xl mr-1'></i>
-                    <span>Profile</span>
+                    <span></span>
                 </a>
                 <button onclick="deleteChatHistory()" title="Delete All" class="text-red-500 hover:text-red-300">
                     <i class='bx bx-trash text-2xl'></i>

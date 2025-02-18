@@ -165,7 +165,7 @@ if (isset($_SESSION['user_id'])) {
             #chat-container {
                 margin-left: 0; /* Reset margin for small screens */
                 padding-top: 80px; /* Adjusted padding for fixed header */
-                padding-bottom: 100px; /* Adjusted padding for fixed input area */
+                padding-bottom: 120px; /* Adjusted padding for fixed input area */
             }
              body.sidebar-open #chat-container {
                 margin-left: 0; /* No margin on mobile when sidebar is open, it overlays */
@@ -238,7 +238,7 @@ if (isset($_SESSION['user_id'])) {
 
         #chat-container {
             padding-top: 80px; /* Adjust based on header height */
-            padding-bottom: 100px; /* Adjust based on input area height */
+            padding-bottom: 120px; /* Adjust based on input area height */
         }
 
 
@@ -302,7 +302,7 @@ if (isset($_SESSION['user_id'])) {
             <div class="space-x-3 flex items-center">
                 <a href="profile.php" title="Profile" class="text-gray-400 hover:text-gray-300 flex items-center">
                     <i class='bx bx-user-circle text-2xl mr-1'></i>
-                    <span>Profile</span>
+                    <span></span>
                 </a>
                 <button onclick="deleteChatHistory()" title="Delete All" class="text-red-500 hover:text-red-300">
                     <i class='bx bx-trash text-2xl'></i>
@@ -380,12 +380,13 @@ if (isset($_SESSION['user_id'])) {
                     </div>
                 </div>
             </form>
-        </div>
-
-        <!-- Footer -->
-        <footer class="bg-gray-800 border-t border-gray-700 p-2 text-center text-gray-400 text-xs">
+            <!-- Footer -->
+        <footer class="bg-gray-800 border-t border-gray-700 text-center text-gray-400 text-xs">
             Owntweet Chatbot can make mistakes.
         </footer>
+        </div>
+
+        
     </div>
 
        <script>

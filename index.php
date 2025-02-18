@@ -29,7 +29,7 @@ if (isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini Chat</title>
+    <title>Owntweet Chat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/6.0.0/marked.min.js"></script>
@@ -110,7 +110,8 @@ if (isset($_SESSION['user_id'])) {
     <div class="flex flex-col h-screen">
         <!-- Header -->
         <div class="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center">
-            <h1 class="text-xl font-semibold text-white">Gemini Chat</h1>
+            <h1 class="text-xl font-semibold text-white"> <i class='bx bxl-xing text-blue-500 align-middle'></i> 
+ Owntweet Chat</h1>
             <div class="space-x-3 flex items-center">
                 <a href="profile.php" title="Profile" class="text-gray-400 hover:text-gray-300 flex items-center">
                     <i class='bx bx-user-circle text-2xl mr-1'></i>
@@ -181,7 +182,7 @@ if (isset($_SESSION['user_id'])) {
                         class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl py-3 px-5 pr-12
                                 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500
                                 transition-colors resize-none overflow-hidden"
-                        placeholder="Message Gemini..."
+                        placeholder="Message something..."
                         autocomplete="off"
                         rows="2"
                         style="max-height: 150px;"

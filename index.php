@@ -125,9 +125,7 @@ if (isset($_SESSION['user_id'])) {
                         style="max-height: 150px;"
                         required></textarea>
                        <div class="absolute right-3 bottom-3 flex items-center gap-2">
-                          <button type="button" onclick="clearInput()" class="text-gray-400 hover:text-gray-300">
-                              <i class='bx bx-x-circle text-xl'></i>
-                          </button>
+                          <!-- REMOVED CLEAR INPUT BUTTON HERE -->
                          <button type="submit" class="text-blue-400 hover:text-blue-300">
                             <i class='bx bx-send text-xl'></i>
                          </button>

@@ -51,16 +51,21 @@ if (isset($_SESSION['user_id'])) {
                 <form id="loginForm" method="POST" class="block space-y-4 sm:space-y-5">
                     <input type="hidden" name="login" value="1">
                     <div>
-                        <label class="block mb-2 text-gray-300 font-medium">Username</label>
-                        <input type="text" name="username"
+                        <label class="block mb-2 text-gray-300 font-medium">Username or Email</label>
+                        <input type="text" name="login_identifier"
                                class="w-full p-3 border border-gray-600 rounded-xl bg-gray-700 text-white focus:border-blue-500 focus:outline-none" required
-                               placeholder="Enter your username">
+                               placeholder="Enter your username or email">
                     </div>
                     <div>
                         <label class="block mb-2 text-gray-300 font-medium">Password</label>
                         <input type="password" name="password"
                                class="w-full p-3 border border-gray-600 rounded-xl bg-gray-700 text-white focus:border-blue-500 focus:outline-none" required
                                placeholder="Enter your password">
+                    </div>
+                    <div class="flex items-center mb-4">
+                        <input type="checkbox" id="remember_me" name="remember_me" value="1"
+                               class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2">
+                        <label for="remember_me" class="ml-2 text-sm font-medium text-gray-400">Remember Me</label>
                     </div>
                     <button type="submit"
                             class="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition-colors font-medium">
@@ -71,18 +76,32 @@ if (isset($_SESSION['user_id'])) {
                 <form id="registerForm" method="POST" class="hidden space-y-4 sm:space-y-5">
                     <input type="hidden" name="register" value="1">
                     <div>
-                        <label class="block mb-2 text-gray-300 font-medium">Username</label>
-                        <input type="text" name="username"
+                        <label class="block mb-2 text-gray-300 font-medium">Username (Max 10 characters)</label>
+                        <input type="text" name="username" id="register_username"
                                class="w-full p-3 border border-gray-600 rounded-xl bg-gray-700 text-white focus:border-blue-500 focus:outline-none" required
-                               placeholder="Choose a username">
+                               placeholder="Choose a username" maxlength="10">
+                        <p id="username-error" class="text-red-500 text-sm mt-1 hidden">Username must be at most 10 characters long.</p>
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-gray-300 font-medium">Email</label>
+                        <input type="email" name="email"
+                               class="w-full p-3 border border-gray-600 rounded-xl bg-gray-700 text-white focus:border-blue-500 focus:outline-none" required
+                               placeholder="Enter your email">
                     </div>
                     <div>
                         <label class="block mb-2 text-gray-300 font-medium">Password</label>
-                        <input type="password" name="password"
+                        <input type="password" name="password" id="register_password"
                                class="w-full p-3 border border-gray-600 rounded-xl bg-gray-700 text-white focus:border-blue-500 focus:outline-none" required
                                placeholder="Create a password">
                     </div>
-                    <button type="submit"
+                    <div>
+                        <label class="block mb-2 text-gray-300 font-medium">Confirm Password</label>
+                        <input type="password" name="password_confirmation" id="confirm_password"
+                               class="w-full p-3 border border-gray-600 rounded-xl bg-gray-700 text-white focus:border-blue-500 focus:outline-none" required
+                               placeholder="Confirm your password">
+                        <p id="password-error" class="text-red-500 text-sm mt-1 hidden">Passwords do not match.</p>
+                    </div>
+                    <button type="submit" id="register-button"
                             class="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 transition-colors font-medium">
                         Register
                     </button>
@@ -98,6 +117,36 @@ if (isset($_SESSION['user_id'])) {
         }
         // Show login form by default
         showForm('login');
+
+        const registerForm = document.getElementById('registerForm');
+        const registerButton = document.getElementById('register-button');
+        const usernameInput = document.getElementById('register_username');
+        const passwordInput = document.getElementById('register_password');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const usernameError = document.getElementById('username-error');
+        const passwordError = document.getElementById('password-error');
+
+        registerForm.addEventListener('submit', function(event) {
+            let isValid = true;
+
+            if (usernameInput.value.length > 10) {
+                usernameError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                usernameError.classList.add('hidden');
+            }
+
+            if (passwordInput.value !== confirmPasswordInput.value) {
+                passwordError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                passwordError.classList.add('hidden');
+            }
+
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission if validation fails
+            }
+        });
     </script>
 </body>
 </html>

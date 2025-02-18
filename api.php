@@ -37,7 +37,7 @@ if(isset($_GET['get_messages'])) {
             $stmt = $pdo->prepare("SELECT message, response, user_id, created_at FROM messages WHERE user_id = ? ORDER BY id ASC");
             $stmt->execute([$_SESSION['user_id']]);
              $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            error_log("API Success: Retrieved messages for user id: ".$_SESSION['user_id']);
+             // error_log("API Success: Retrieved messages for user id: ".$_SESSION['user_id']); // Removed success log
              echo json_encode($messages);
             die();
         } catch (PDOException $e) {
@@ -65,7 +65,7 @@ $default_system_prompt = "Must Important before you write:
 You are a human and friendly person, writing system must Human 100% all the text, write in the same language as the user writes. Must focus human touch ouch write. Human thought & Reddit style.";
 
 try {
-    error_log("API Request: Processing new message for user id: ".$_SESSION['user_id']);
+    // error_log("API Request: Processing new message for user id: ".$_SESSION['user_id']); // Removed request log
 
     // Fetch user's saved system prompt
     $stmtPrompt = $pdo->prepare("SELECT system_prompt_text FROM saved_prompts WHERE user_id = ?");
@@ -81,7 +81,7 @@ try {
     $stmt = $pdo->prepare("SELECT message, response FROM messages WHERE user_id = ? ORDER BY id DESC LIMIT " . $context_size);
       $stmt->execute([$_SESSION['user_id']]);
      $recentMessages = array_reverse($stmt->fetchAll(PDO::FETCH_ASSOC));
-    error_log("API Request: Retrieved recent messages ".print_r($recentMessages, true));
+    // error_log("API Request: Retrieved recent messages ".print_r($recentMessages, true)); // Removed request log
 
     $messagesForGemini = [];
     //Add system prompt as context
@@ -96,22 +96,22 @@ try {
 
     //Current user message
     $messagesForGemini[] = ['is_user' => true, 'text' => $message];
-    error_log("API Request: Messages for Gemini ".print_r($messagesForGemini, true));
+    // error_log("API Request: Messages for Gemini ".print_r($messagesForGemini, true)); // Removed request log
 
 
     $gemini = new Gemini($gemini_api_key);
-    error_log("API Request: Gemini object created");
+    // error_log("API Request: Gemini object created"); // Removed request log
     $response = $gemini->generateResponse($messagesForGemini);
-    error_log("API Request: Gemini response " . print_r($response, true));
+    // error_log("API Request: Gemini response " . print_r($response, true)); // Removed request log
 
     // Save to database
     $stmt = $pdo->prepare("INSERT INTO messages (user_id, message, response) VALUES (?, ?, ?)");
      $stmt->execute([$_SESSION['user_id'], $message, $response]);
-     error_log("API Request: Message saved to database.");
+     // error_log("API Request: Message saved to database."); // Removed request log
 
     // Respond with the AI response
     echo json_encode(['response' => $response]);
-    error_log("API Success: Response sent.");
+    // error_log("API Success: Response sent."); // Removed success log
 
 } catch (PDOException $e) {
     error_log("API Error: PDOException - " . $e->getMessage());

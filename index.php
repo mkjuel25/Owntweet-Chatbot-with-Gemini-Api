@@ -136,6 +136,8 @@ if (isset($_SESSION['user_id'])) {
             }
             #chat-container {
                 margin-left: 0; /* Reset margin for small screens */
+                 padding-top: 60px; /* Adjusted padding for fixed header */
+                padding-bottom: 120px; /* Adjusted padding for fixed input area */
             }
             body.sidebar-open #chat-container {
                 margin-left: 250px; /* Add margin when sidebar is open */
@@ -187,6 +189,30 @@ if (isset($_SESSION['user_id'])) {
             }
         }
 
+        /* Fixed Header and Input Styles */
+        .header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+        }
+
+        .input-area-fixed {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800/50 fallback if backdrop-blur is not supported */
+            backdrop-filter: blur(10px); /* backdrop-blur-sm equivalent */
+        }
+
+        #chat-container {
+            padding-top: 60px; /* Adjust based on header height */
+            padding-bottom: 120px; /* Adjust based on input area height */
+        }
+
 
     </style>
 </head>
@@ -235,7 +261,7 @@ if (isset($_SESSION['user_id'])) {
     <!-- Main Content -->
     <div class="flex flex-col h-screen flex-1">
         <!-- Header -->
-        <div class="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center">
+        <div class="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center header-fixed">
             <div class="flex items-center">
                 <button id="sidebar-toggle" class="text-gray-400 hover:text-gray-300 mr-4 md:hidden">  <!-- Hidden on medium and up -->
                     <i class='bx bx-menu text-2xl'></i>
@@ -304,7 +330,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
 
         <!-- Input Area -->
-        <div class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 p-4">
+        <div class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 p-4 input-area-fixed">
             <form id="chat-form" class="flex gap-3 items-center">
                 <div class="flex-1 relative">
                     <textarea id="message-input"
@@ -485,7 +511,10 @@ if (isset($_SESSION['user_id'])) {
          hljs.highlightAll();
          // Scroll to bottom after initial load
          chatContainer.scrollTop = chatContainer.scrollHeight;
+         setTimeout(() => {
+             preloaderAnimation.style.display = 'none'; // Hide preloader after 1s (animation duration)
+         }, 1000);
      });
-</script>
+    </script>
 </body>
 </html>

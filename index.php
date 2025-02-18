@@ -49,10 +49,11 @@ if (isset($_SESSION['user_id'])) {
         <!-- Header -->
          <div class="bg-gray-800 border-b border-gray-700 p-4 flex justify-between items-center">
                 <h1 class="text-xl font-semibold text-white">Gemini Chat</h1>
-                  <div class="space-x-2">
-                    <button onclick="copyAllChat()" title="Copy All" class="text-white hover:text-gray-300">
-                        <i class='bx bx-copy-alt text-2xl'></i>
-                    </button>
+                  <div class="space-x-3 flex items-center">
+                      <a href="profile.php" title="Profile" class="text-gray-400 hover:text-gray-300 flex items-center">
+                          <i class='bx bx-user-circle text-2xl mr-1' ></i>
+                          <span>Profile</span>
+                      </a>
                     <button onclick="deleteChatHistory()" title="Delete All" class="text-red-500 hover:text-red-300">
                         <i class='bx bx-trash text-2xl'></i>
                     </button>
@@ -79,22 +80,22 @@ if (isset($_SESSION['user_id'])) {
                                   <button onclick="copyMessage(this)" class="inline-block ml-2 text-gray-500 hover:text-gray-400">
                                      <i class='bx bx-copy'></i>
                                   </button>
-                               <?php endif; ?> 
+                               <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Duplicate demo message (added directly in HTML) -->
             <div class="flex justify-start mb-4">
                 <div class="max-w-[90%] md:max-w-[70%]">
                     <div class="bg-gray-700 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-none">
                        <div class="message-content">
-                       
+
                        <?php if($msg['user_id'] == $_SESSION['user_id']): ?>
                                   <?= htmlspecialchars($msg['response']) ?>
-                               
+
                               <?php endif; ?>
-                       
+
                        </div>
                     </div>
                      <div class="text-xs text-gray-400 mt-1 ">
@@ -104,10 +105,10 @@ if (isset($_SESSION['user_id'])) {
                            </button>
                      </div>
                 </div>
-            </div>           
-                               
+            </div>
+
             <?php endforeach; ?>
-            
+
         </div>
 
         <!-- Input Area -->
@@ -161,7 +162,7 @@ if (isset($_SESSION['user_id'])) {
              messageDiv.innerHTML = `
                 <div class="flex ${isUser ? 'justify-end' : 'justify-start'} mb-4">
                     <div class="max-w-[90%] md:max-w-[70%]">
-                        <div class="${isUser ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100'} 
+                        <div class="${isUser ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100'}
                             px-4 py-3 rounded-2xl ${isUser ? 'rounded-br-none' : 'rounded-bl-none'}">
                             ${isUser ? messageContent : responseDiv }  <!-- Corrected logic: Show messageContent if user, else show responseDiv -->
                         </div>
@@ -189,34 +190,13 @@ if (isset($_SESSION['user_id'])) {
                 <div class="typing-dot" style="animation-delay: 0.2s"></div>
                 <div class="typing-dot" style="animation-delay: 0.4s"></div>
             `;
-        
+
              const lastMessage = chatContainer.lastElementChild;
              if(lastMessage) {
               lastMessage.querySelector('.typing-indicator').appendChild(typingIndicator);
           }
          }
-        // Polling function for new messages
-        async function checkForNewMessages() {
-            try {
-                 if(!'<?=$_SESSION['user_id']?>') return;
-                    const lastMessageDiv = chatContainer.lastElementChild;
-                    const lastMessageTime = lastMessageDiv ? new Date(lastMessageDiv.querySelector('.text-xs').textContent).getTime() : 0;
-                const response = await fetch('api.php?get_messages=1');
-                    if (response.ok) {
-                        const data = await response.json();
-                        const newMessages = data.filter(msg => new Date(msg.created_at).getTime() > lastMessageTime);
-                        newMessages.forEach(msg => {
-                            addMessageToChat(msg.message, msg.response, msg.user_id, msg.created_at);
-                        });
-                    } else {
-                        console.error('Failed to load new messages');
-                    }
-                } catch (error) {
-                    console.error('Error loading new messages:', error);
-                }
-        }
-        setInterval(checkForNewMessages, 5000); // Check for new messages every 5 seconds
-        
+
         function addMessageToChat(message, response, user_id, created_at) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message-animation';
@@ -295,26 +275,12 @@ if (isset($_SESSION['user_id'])) {
     const messageContent = button.closest('.flex').querySelector('.message-content');
     const text = messageContent.textContent.trim(); // Remove extra spaces
     navigator.clipboard.writeText(text).then(() => {
-        
+
     }).catch(err => {
         console.error('Failed to copy message: ', err);
     });
 }
 
-function copyAllChat() {
-    let allMessages = '';
-    chatContainer.querySelectorAll('.flex').forEach(messageDiv => {
-        const textDiv = messageDiv.querySelector('.bg-blue-600, .bg-gray-700');
-        if (textDiv) {
-            allMessages += textDiv.textContent.trim() + "\n\n"; // Add clean text with proper spacing
-        }
-    });
-    navigator.clipboard.writeText(allMessages.trim()).then(() => {
-        
-    }).catch(err => {
-        console.error('Failed to copy all messages: ', err);
-    });
-}
 
        async function deleteChatHistory() {
         if (confirm("Are you sure you want to delete all chat history?")) {

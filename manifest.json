@@ -3,9 +3,10 @@
   "short_name": "OwntweetChat",
   "description": "A friendly chatbot powered by Gemini API.",
   "start_url": "index.php",
+  "scope": ".",
   "display": "standalone",
-  "background_color": "#111827",  /* Dark background color - adjust to match your theme */
-  "theme_color": "#3b82f6",      /* Blue theme color - adjust to match your theme */
+  "background_color": "#111827",  
+  "theme_color": "#3b82f6",      
   "icons": [
     {
       "src": "images/icon-192x192.png", /* Replace with your 192x192 icon path */

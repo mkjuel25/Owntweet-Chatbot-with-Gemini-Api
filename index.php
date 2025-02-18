@@ -67,7 +67,7 @@ if (isset($_SESSION['user_id'])) {
             <?php foreach($messages as $msg): ?>
                 <div class="flex <?= ($msg['user_id'] == $_SESSION['user_id']) ? 'justify-end' : 'justify-start' ?> mb-4">
                     <div class="max-w-[90%] md:max-w-[70%]">
-                        <div class="<?= ($msg['user_id'] == $_SESSION['user_id']) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100' ?> px-4 py-3 rounded-2xl <?= ($msg['user_id'] == $_SESSION['user_id']) ? 'rounded-br-none' : 'rounded-bl-none' ?>">
+                        <div class="<?= ($msg['user_id'] == $_SESSION['user_id']) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100' ?> px-4 py-3 rounded-2xl <?= ($msg['user_id'] == $_SESSION['user_id']) ? 'rounded-br-none' : 'rounded-bl-none' ?> message-container">
                              <?php if($msg['user_id'] == $_SESSION['user_id']): ?>
                                   <?= htmlspecialchars($msg['message']) ?>
                                <?php else: ?>
@@ -84,8 +84,8 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </div>
-
-                <!-- Duplicate demo message (added directly in HTML) -->
+    
+            <!-- Duplicate demo message (added directly in HTML) -->
             <div class="flex justify-start mb-4">
                 <div class="max-w-[90%] md:max-w-[70%]">
                     <div class="bg-gray-700 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-none">
@@ -146,33 +146,41 @@ if (isset($_SESSION['user_id'])) {
             messageDiv.className = 'message-animation';
             const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-            let messageContent;
+            let messageContentHTML = ''; // Changed variable name to clarify HTML context
             let responseDiv = '';
-            if (isUser) {
-                messageContent = message;
-            } else if (status === 'thinking') {
-                messageContent = '<div class="typing-indicator"></div>'; // Placeholder for 'thinking'
-            } else {
-                 messageContent = '';
-                responseDiv = '<div class="message-content">' + marked.parse(message) + '</div>';
-           }
 
-             messageDiv.innerHTML = `
+            if (isUser) {
+                messageContentHTML = message; // Assign message to HTML variable
+            } else if (status === 'thinking') {
+                messageContentHTML = '<div class="typing-indicator"></div>'; // Placeholder for 'thinking'
+            } else {
+                messageContentHTML = '<div class="message-content">' + marked.parse(message) + '</div>'; // For AI response, use message-content div and marked.parse
+            }
+
+            messageDiv.innerHTML = `
                 <div class="flex ${isUser ? 'justify-end' : 'justify-start'} mb-4">
                     <div class="max-w-[90%] md:max-w-[70%]">
                         <div class="${isUser ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100'}
-                            px-4 py-3 rounded-2xl ${isUser ? 'rounded-br-none' : 'rounded-bl-none'}">
-                            ${isUser ? messageContent : responseDiv }  <!-- Corrected logic: Show messageContent if user, else show responseDiv -->
+                            px-4 py-3 rounded-2xl ${isUser ? 'rounded-br-none' : 'rounded-bl-none'} message-container">  <!-- Added class message-container -->
                         </div>
                         <div class="text-xs text-gray-400 mt-1 ${isUser ? 'text-right' : ''}">
                             ${timestamp}
                             ${!isUser ? `<button onclick="copyMessage(this)" class="inline-block ml-2 text-gray-500 hover:text-gray-400">
                                         <i class='bx bx-copy'></i>
-                                </button>` : ''}
+                                    </button>` : ''}
                         </div>
                     </div>
                 </div>
             `;
+
+            // Set textContent for user messages to ensure plain text rendering
+            if (isUser) {
+                messageDiv.querySelector('.message-container').textContent = messageContentHTML; // Use textContent for user message
+            } else {
+                messageDiv.querySelector('.message-container').innerHTML = messageContentHTML; // Use innerHTML for AI response (Markdown parsing)
+            }
+
+
             chatContainer.appendChild(messageDiv);
             messageDiv.scrollIntoView({ behavior: 'smooth' });
             if (!isUser && status !== 'thinking') {

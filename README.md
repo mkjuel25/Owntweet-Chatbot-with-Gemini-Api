@@ -94,8 +94,8 @@ Follow these steps to set up the Owntweet Chatbot:
      <?php
      session_start();
      $host = "localhost";       // Your MySQL server host (usually localhost)
-     $dbname = "Owntweet_chatbot"; // The database name you created
-     $user = "chatbot";          // The database user you created
+     $dbname = "chatbot"; // The database name you created
+     $user = " ";          // The database user you created
      $pass = "password";        // The database password you set
 
      $gemini_api_key = "YOUR_GEMINI_API_KEY"; // Replace with your actual Gemini API key

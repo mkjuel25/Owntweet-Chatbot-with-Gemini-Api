@@ -84,8 +84,8 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </div>
-
-            <!-- Duplicate demo message (added directly in HTML) -->
+  
+  <!-- Duplicate demo message (added directly in HTML) -->
             <div class="flex justify-start mb-4">
                 <div class="max-w-[90%] md:max-w-[70%]">
                     <div class="bg-gray-700 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-none">
@@ -159,7 +159,6 @@ if (isset($_SESSION['user_id'])) {
                     <div class="max-w-[90%] md:max-w-[70%]">
                         <div class="${isUser ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100'}
                             px-4 py-3 rounded-2xl ${isUser ? 'rounded-br-none' : 'rounded-bl-none'} message-container">  <!-- Added class message-container -->
-                             ${isUser ? messageContentHTML : ''}  <!-- Display user message here -->
                         </div>
                         <div class="text-xs text-gray-400 mt-1 ${isUser ? 'text-right' : ''}">
                             ${timestamp}
@@ -171,8 +170,10 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             `;
 
-
-            if (!isUser) {
+            // Set textContent for user messages to ensure plain text rendering
+            if (isUser) {
+                messageDiv.querySelector('.message-container').textContent = messageContentHTML; // Use textContent for user message
+            } else {
                 messageDiv.querySelector('.message-container').innerHTML = messageContentHTML; // Use innerHTML for AI response (Markdown parsing)
             }
 
@@ -309,14 +310,6 @@ if (isset($_SESSION['user_id'])) {
         input.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
-        });
-
-        // Apply highlight.js to existing content after DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.message-content').forEach(el => {
-                el.innerHTML = marked.parse(el.textContent);
-                hljs.highlightAll(el);
-            });
         });
     </script>
 </body>

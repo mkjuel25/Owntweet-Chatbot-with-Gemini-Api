@@ -104,16 +104,42 @@ if (isset($_SESSION['user_id'])) {
               animation-delay: 0.4s;
           }
 
-        /* New Sidebar Styles */
+        /* Sidebar Styles */
         aside {
             height: 100vh; /* Full height */
-            position: sticky; /* Fixed sidebar */
+            position: fixed; /* Fixed sidebar for desktop */
             top: 0;
             left: 0;
-            z-index: 10;
+            z-index: 30; /* Higher z-index for sidebar */
             width: 250px; /* Adjust sidebar width as needed */
             border-right: 1px solid #4B5563; /* Border color from tailwind gray-700 */
+            transform: translateX(-100%); /* Hide sidebar off-screen initially on mobile */
+            transition: transform 0.3s ease-in-out; /* Smooth transition for mobile sidebar */
         }
+
+        aside.open {
+            transform: translateX(0); /* Slide in sidebar when open class is added */
+        }
+
+        /* Sidebar Backdrop for Mobile */
+        #sidebar-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black backdrop */
+            z-index: 25; /* Below sidebar, above main content */
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #sidebar-backdrop.open {
+            display: block; /* Show backdrop when sidebar is open */
+            opacity: 1;
+        }
+
 
         /* Flex container for body to hold sidebar and content side by side */
         body.flex {
@@ -125,22 +151,24 @@ if (isset($_SESSION['user_id'])) {
         }
 
         /* Responsive adjustments for smaller screens */
-        @media (max-width: 768px) {
+        @media (min-width: 769px) { /* Desktop styles */
             aside {
-                display: none; /* Hide sidebar on small screens by default */
-                width: 0;
+                position: sticky; /* Make sidebar sticky on desktop */
+                transform: translateX(0); /* Always show sidebar on desktop */
             }
-            body.sidebar-open aside {
-                display: block; /* Show sidebar when sidebar-open class is added */
-                width: 250px; /* Sidebar width */
+            #sidebar-backdrop {
+                display: none !important; /* Never show backdrop on desktop */
             }
+        }
+
+        @media (max-width: 768px) { /* Mobile styles */
             #chat-container {
                 margin-left: 0; /* Reset margin for small screens */
-                 padding-top: 60px; /* Adjusted padding for fixed header */
+                padding-top: 60px; /* Adjusted padding for fixed header */
                 padding-bottom: 120px; /* Adjusted padding for fixed input area */
             }
-            body.sidebar-open #chat-container {
-                margin-left: 250px; /* Add margin when sidebar is open */
+             body.sidebar-open #chat-container {
+                margin-left: 0; /* No margin on mobile when sidebar is open, it overlays */
             }
         }
 
@@ -224,8 +252,11 @@ if (isset($_SESSION['user_id'])) {
         <div id="preloader-text">Loading...</div>
     </div>
 
+     <!-- Sidebar Backdrop (for mobile) -->
+    <div id="sidebar-backdrop"></div>
+
     <!-- Left Sidebar -->
-    <aside class="bg-gray-800 border-r border-gray-700 flex-col hidden md:flex"> <!-- Hidden on small, visible on medium and up -->
+    <aside class="bg-gray-800 border-r border-gray-700 flex-col">
         <div class="p-4 flex items-center justify-center border-b border-gray-700">
             <h1 class="text-xl font-semibold text-white">
                 <i class='bx bxl-xing text-blue-500 align-middle'></i>
@@ -266,12 +297,12 @@ if (isset($_SESSION['user_id'])) {
                 <button id="sidebar-toggle" class="text-gray-400 hover:text-gray-300 mr-4 md:hidden">  <!-- Hidden on medium and up -->
                     <i class='bx bx-menu text-2xl'></i>
                 </button>
-                <h2 class="text-xl font-semibold text-white">Conversation</h2>
+                <h2 class="text-xl font-semibold text-white">Chat</h2>
             </div>
             <div class="space-x-3 flex items-center">
                 <a href="profile.php" title="Profile" class="text-gray-400 hover:text-gray-300 flex items-center">
                     <i class='bx bx-user-circle text-2xl mr-1'></i>
-                    <span></span>
+                    <span>Profile</span>
                 </a>
                 <button onclick="deleteChatHistory()" title="Delete All" class="text-red-500 hover:text-red-300">
                     <i class='bx bx-trash text-2xl'></i>
@@ -364,14 +395,31 @@ if (isset($_SESSION['user_id'])) {
     const sidebarToggle = document.getElementById('sidebar-toggle'); // Sidebar toggle button
     const body = document.querySelector('body'); // Body element for sidebar toggle class
     const preloaderAnimation = document.getElementById('preloader-animation'); // Preloader element
+    const sidebar = document.querySelector('aside'); // Sidebar element
+    const sidebarBackdrop = document.getElementById('sidebar-backdrop'); // Sidebar backdrop
 
 
     // Sidebar toggle functionality
     if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', () => {
-            body.classList.toggle('sidebar-open'); // Toggle sidebar-open class on body
+        sidebarToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent body click event from firing immediately
+            sidebar.classList.toggle('open'); // Toggle open class on sidebar
+            sidebarBackdrop.classList.toggle('open'); // Toggle open class on backdrop
+            body.classList.toggle('sidebar-open'); // Toggle sidebar-open on body for potential CSS adjustments
         });
     }
+
+    // Close sidebar when clicking outside on mobile
+    sidebarBackdrop.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        sidebarBackdrop.classList.remove('open');
+        body.classList.remove('sidebar-open');
+    });
+
+    // Prevent backdrop from closing sidebar when clicking inside sidebar
+    sidebar.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent click from propagating to backdrop
+    });
 
 
     // Add new message to chat

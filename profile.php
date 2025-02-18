@@ -153,6 +153,7 @@ if (isset($_GET['logout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
     <style>
         @keyframes slideIn {
             from { transform: translateY(20px); opacity: 0; }
@@ -188,7 +189,10 @@ if (isset($_GET['logout'])) {
                 </div>
                 <div class="flex space-x-3">
                     <a href="index.php" class="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
-                        <i class='bx bx-robot text-2xl text-blue-400'>Chatbot</i>
+                        <i class='bx bx-robot text-2xl text-blue-400'>
+                        
+                <i class='bx bxl-xing text-blue-500 align-middle'></i> 
+                     </i>
                     </a>
                     <a href="?logout=1" class="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
                         <i class='bx bx-log-out text-2xl text-red-400'></i>

@@ -84,18 +84,15 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </div>
-    
+
             <!-- Duplicate demo message (added directly in HTML) -->
             <div class="flex justify-start mb-4">
                 <div class="max-w-[90%] md:max-w-[70%]">
                     <div class="bg-gray-700 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-none">
                        <div class="message-content">
-
-                       <?php if($msg['user_id'] == $_SESSION['user_id']): ?>
-                                  <?= htmlspecialchars($msg['response']) ?>
-
-                              <?php endif; ?>
-
+                       <?php if(isset($msg['response'])): ?>
+                           <?= htmlspecialchars($msg['response']) ?>
+                       <?php endif; ?>
                        </div>
                     </div>
                      <div class="text-xs text-gray-400 mt-1 ">
@@ -162,6 +159,7 @@ if (isset($_SESSION['user_id'])) {
                     <div class="max-w-[90%] md:max-w-[70%]">
                         <div class="${isUser ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-100'}
                             px-4 py-3 rounded-2xl ${isUser ? 'rounded-br-none' : 'rounded-bl-none'} message-container">  <!-- Added class message-container -->
+                             ${isUser ? messageContentHTML : ''}  <!-- Display user message here -->
                         </div>
                         <div class="text-xs text-gray-400 mt-1 ${isUser ? 'text-right' : ''}">
                             ${timestamp}
@@ -173,10 +171,8 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             `;
 
-            // Set textContent for user messages to ensure plain text rendering
-            if (isUser) {
-                messageDiv.querySelector('.message-container').textContent = messageContentHTML; // Use textContent for user message
-            } else {
+
+            if (!isUser) {
                 messageDiv.querySelector('.message-container').innerHTML = messageContentHTML; // Use innerHTML for AI response (Markdown parsing)
             }
 
@@ -313,6 +309,14 @@ if (isset($_SESSION['user_id'])) {
         input.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
+        });
+
+        // Apply highlight.js to existing content after DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.message-content').forEach(el => {
+                el.innerHTML = marked.parse(el.textContent);
+                hljs.highlightAll(el);
+            });
         });
     </script>
 </body>

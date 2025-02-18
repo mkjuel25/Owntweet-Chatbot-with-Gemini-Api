@@ -282,11 +282,9 @@ if (isset($_SESSION['user_id'])) {
 
         // initial highlight when page load
          document.addEventListener('DOMContentLoaded', (event) => {
-             document.querySelectorAll('pre code').forEach(el => {
-                 hljs.highlightElement(el);
-             });
-              // Scroll to bottom after initial load
-              chatContainer.scrollTop = chatContainer.scrollHeight;
+             hljs.highlightAll();
+             // Scroll to bottom after initial load
+             chatContainer.scrollTop = chatContainer.scrollHeight;
          });
     </script>
 </body>

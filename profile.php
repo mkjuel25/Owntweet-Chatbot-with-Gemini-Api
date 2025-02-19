@@ -159,7 +159,7 @@ if (isset($_GET['logout'])) {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
-        
+
         .animate-slide-in {
             animation: slideIn 0.6s ease-out forwards;
         }
@@ -167,7 +167,7 @@ if (isset($_GET['logout'])) {
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.3);
@@ -175,6 +175,21 @@ if (isset($_GET['logout'])) {
 
         .input-focus:focus {
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .example-prompts-link {
+            color: #9CA3AF; /* Gray-400 from Tailwind */
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.875rem; /* text-sm from Tailwind */
+        }
+
+        .example-prompts-link:hover {
+            color: #CBD5E0; /* Gray-300 from Tailwind on hover */
         }
     </style>
 </head>
@@ -190,8 +205,9 @@ if (isset($_GET['logout'])) {
                 <div class="flex space-x-3">
                     <a href="index.php" class="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
                         <i class='bx bx-robot text-2xl text-blue-400'>
-                        
-                <i class='bx bxl-xing text-blue-500 align-middle'></i> 
+
+
+                <i class='bx bxl-xing text-blue-500 align-middle'></i>
                      </i>
                     </a>
                     <a href="?logout=1" class="p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
@@ -207,11 +223,74 @@ if (isset($_GET['logout'])) {
                     <span class="text-emerald-300"><?= $prompt_success_message ?></span>
                 </div>
             <?php endif; ?>
-            
-            <!-- Repeat similar blocks for other messages -->
+            <?php if(isset($prompt_error_message)): ?>
+                <div class="bg-red-500/20 p-4 rounded-xl mb-6 border border-red-500/30 flex items-center space-x-3">
+                    <i class='bx bx-x-circle text-red-400'></i>
+                    <span class="text-red-300"><?= $prompt_error_message ?></span>
+                </div>
+            <?php endif; ?>
+            <?php if(isset($profile_success_message)): ?>
+                <div class="bg-emerald-500/20 p-4 rounded-xl mb-6 border border-emerald-500/30 flex items-center space-x-3">
+                    <i class='bx bx-check-circle text-emerald-400'></i>
+                    <span class="text-emerald-300"><?= $profile_success_message ?></span>
+                </div>
+            <?php endif; ?>
+            <?php if(isset($profile_error_message)): ?>
+                <div class="bg-red-500/20 p-4 rounded-xl mb-6 border border-red-500/30 flex items-center space-x-3">
+                    <i class='bx bx-x-circle text-red-400'></i>
+                    <span class="text-red-300"><?= $profile_error_message ?></span>
+                </div>
+            <?php endif; ?>
+            <?php if(isset($password_success_message)): ?>
+                <div class="bg-emerald-500/20 p-4 rounded-xl mb-6 border border-emerald-500/30 flex items-center space-x-3">
+                    <i class='bx bx-check-circle text-emerald-400'></i>
+                    <span class="text-emerald-300"><?= $password_success_message ?></span>
+                </div>
+            <?php endif; ?>
+            <?php if(isset($password_error_message)): ?>
+                <div class="bg-red-500/20 p-4 rounded-xl mb-6 border border-red-500/30 flex items-center space-x-3">
+                    <i class='bx bx-x-circle text-red-400'></i>
+                    <span class="text-red-300"><?= $password_error_message ?></span>
+                </div>
+            <?php endif; ?>
 
-            <!-- Profile Details Card -->
+
+            <!-- System Prompt Section - MOVED TO TOP -->
             <div class="card-hover bg-gray-700/30 rounded-2xl p-6 mb-6 border border-gray-600/30">
+                <form method="POST">
+                    <input type="hidden" name="save_prompt" value="1">
+                    <h2 class="text-xl font-semibold text-white mb-6 flex items-center space-x-2">
+                        <i class='bx bx-message-alt-edit text-blue-400'></i>
+                        <span>AI Preferences</span>
+                    </h2>
+
+                    <div class="mb-4">
+                        <label class="block text-sm text-gray-400 mb-2">Custom System Prompt</label>
+                        <textarea name="system_prompt_text" rows="4"
+                                  class="w-full bg-gray-800/50 border border-gray-600/30 rounded-xl px-4 py-3 text-white input-focus"><?= $savedSystemPrompt ?></textarea>
+                        <p class="text-gray-500 text-sm mt-2">This prompt helps guide the AI's behavior. Leave blank for default settings.</p>
+                    </div>
+
+                    <div>
+                        <p  id="toggleExamplesLink" class="example-prompts-link">See example prompts</p>
+                        <div id="examplePromptsContainer" class="hidden mt-2">
+                            <p class="text-gray-400 text-sm mb-2">Example Prompts:</p>
+                            <ul class="list-disc list-inside text-gray-400 text-sm">
+                                <li><strong>Human & Friendly:</strong> "You are a human and friendly person. Write all text as if it's 100% human-written. Write in the same language as the user. Focus on human touch and emotion. Write with human thoughts and in Reddit style."</li>
+                                <li><strong>Informative & Helpful Assistant:</strong> "You are an informative and helpful assistant. Give concise and direct answers. Maintain professionalism and avoid unnecessary talk. Focus on the quality and accuracy of information."</li>
+                                <li><strong>Creative & Imaginative:</strong> "You are a creative and imaginative writer. Write answers like engaging stories or poems. Use metaphors, similes, and imagery. Encourage exploring new ideas and possibilities. Maintain an imaginative and wondrous tone in writing."</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="mt-6 w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-6 rounded-xl font-medium transition-all">
+                        Save AI Preferences
+                    </button>
+                </form>
+            </div>
+
+             <!-- Profile Details Card -->
+             <div class="card-hover bg-gray-700/30 rounded-2xl p-6 mb-6 border border-gray-600/30">
                 <div class="grid grid-cols-2 gap-4 text-gray-300">
                     <div class="flex items-center space-x-3">
                         <i class='bx bx-user text-blue-400'></i>
@@ -232,11 +311,11 @@ if (isset($_GET['logout'])) {
                         <i class='bx bx-edit-alt text-blue-400'></i>
                         <span>Edit Profile</span>
                     </h2>
-                    
+
                     <div class="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label class="block text-sm text-gray-400 mb-2">Username</label>
-                            <input type="text" name="edit_username" value="<?= $username ?>" 
+                            <input type="text" name="edit_username" value="<?= $username ?>"
                                    class="w-full bg-gray-800/50 border border-gray-600/30 rounded-xl px-4 py-3 text-white input-focus">
                         </div>
                         <div>
@@ -255,7 +334,7 @@ if (isset($_GET['logout'])) {
                                    class="w-full bg-gray-800/50 border border-gray-600/30 rounded-xl px-4 py-3 text-white input-focus">
                         </div>
                     </div>
-                    
+
                     <button type="submit" class="mt-6 w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-6 rounded-xl font-medium transition-all">
                         Update Profile
                     </button>
@@ -270,7 +349,7 @@ if (isset($_GET['logout'])) {
                         <i class='bx bx-lock-alt text-blue-400'></i>
                         <span>Change Password</span>
                     </h2>
-                    
+
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm text-gray-400 mb-2">Current Password</label>
@@ -290,35 +369,27 @@ if (isset($_GET['logout'])) {
                             </div>
                         </div>
                     </div>
-                    
+
                     <button type="submit" class="mt-6 w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-6 rounded-xl font-medium transition-all">
                         Change Password
                     </button>
                 </form>
             </div>
 
-            <!-- System Prompt Section -->
-            <div class="card-hover bg-gray-700/30 rounded-2xl p-6 border border-gray-600/30">
-                <form method="POST">
-                    <input type="hidden" name="save_prompt" value="1">
-                    <h2 class="text-xl font-semibold text-white mb-6 flex items-center space-x-2">
-                        <i class='bx bx-message-alt-edit text-blue-400'></i>
-                        <span>AI Preferences</span>
-                    </h2>
-                    
-                    <div class="mb-4">
-                        <label class="block text-sm text-gray-400 mb-2">Custom System Prompt</label>
-                        <textarea name="system_prompt_text" rows="4"
-                                  class="w-full bg-gray-800/50 border border-gray-600/30 rounded-xl px-4 py-3 text-white input-focus"><?= $savedSystemPrompt ?></textarea>
-                        <p class="text-gray-500 text-sm mt-2">This prompt helps guide the AI's behavior. Leave blank for default settings.</p>
-                    </div>
-                    
-                    <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 px-6 rounded-xl font-medium transition-all">
-                        Save AI Preferences
-                    </button>
-                </form>
-            </div>
+
         </div>
     </div>
+
+    <script>
+        document.getElementById('toggleExamplesLink').addEventListener('click', function() {
+            const examplesContainer = document.getElementById('examplePromptsContainer');
+            examplesContainer.classList.toggle('hidden');
+            if (examplesContainer.classList.contains('hidden')) {
+                this.textContent = 'See example prompts';
+            } else {
+                this.textContent = 'Hide example prompts';
+            }
+        });
+    </script>
 </body>
 </html>

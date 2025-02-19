@@ -10,11 +10,11 @@ It utilizes the Google Gemini API to provide conversational responses within a w
 
 | Screenshot 1 | Screenshot 2 | Screenshot 3 |
 |-------------|-------------|-------------|
-| ![Screenshot 1](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/chatPage.jpg) | ![Screenshot 2](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/conversation.jpg) | ![Screenshot 3](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/profile.jpg) |
+| ![Screenshot 1](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/guest%20page.jpg) | ![Screenshot 2](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/conversation.jpg) | ![Screenshot 3](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/profile.jpg) |
 
 | Screenshot 4 | Screenshot 5 | Screenshot 6 |
 |-------------|-------------|-------------|
-| ![Screenshot 4](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/aiPreferenceOption.jpg) | ![Screenshot 5](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/aiPreferenceOption.jpg) | ![Screenshot 6](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/register.jpg) |
+| ![Screenshot 4](https://github.com/mkjuel25/Owntweet-Chatbot-with-Gemini-Api/blob/main/images/Screenshot/aiPreferenceOption.jpg) | ![Screenshot 5]() | ![Screenshot 6]() |
 
 
 

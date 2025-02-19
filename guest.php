@@ -6,6 +6,121 @@ if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit;
 }
+
+// Handle login form submission
+if (isset($_POST['login'])) {
+    $login_identifier = $_POST['login_identifier'];
+    $password = $_POST['password'];
+    $remember_me = isset($_POST['remember_me']); // Check if remember_me checkbox is checked
+
+    // Validate input (basic validation, you should add more robust validation)
+    if (empty($login_identifier) || empty($password)) {
+        $error = "Please fill in all fields.";
+    } else {
+        // Determine if login_identifier is email or username (or phone number - you might need to adjust this logic)
+        if (filter_var($login_identifier, FILTER_VALIDATE_EMAIL)) {
+            $identifier_type = 'email';
+            $email = $login_identifier;
+            $username = null; // Not used for email login
+        } else {
+            $identifier_type = 'username';
+            $username = $login_identifier;
+            $email = null; // Not used for username login
+        }
+
+        // Prepare SQL query based on identifier type
+        if ($identifier_type == 'email') {
+            $stmt = $pdo->prepare("SELECT id, password FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+        } else {
+            $stmt = $pdo->prepare("SELECT id, password FROM users WHERE username = ? OR phone_number = ?"); // Assuming phone_number is also an option
+            $stmt->execute([$username, $username]); // Try username or phone number
+        }
+
+        if ($stmt->rowCount() > 0) {
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = $user['id'];
+
+                // Remember me functionality
+                if ($remember_me) {
+                    $cookie_expiry = time() + (30 * 24 * 3600); // 30 days
+                    setcookie('remember_user', $user['id'], $cookie_expiry, '/', '', true, true); // HttpOnly and Secure (if using HTTPS)
+                }
+
+                header("Location: index.php");
+                exit;
+            } else {
+                $error = "Incorrect password.";
+            }
+        } else {
+            $error = "User not found.";
+        }
+    }
+}
+
+// Handle registration form submission
+if (isset($_POST['register'])) {
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $password_confirmation = $_POST['password_confirmation'];
+
+    // Validate registration input
+    if (strlen($username) > 10) {
+        $error = "Username must be at most 10 characters.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Invalid email format.";
+    } elseif ($password !== $password_confirmation) {
+        $error = "Passwords do not match.";
+    } else {
+        // Check if username or email already exists
+        $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ? OR email = ?");
+        $stmt_check->execute([$username, $email]);
+        $count = $stmt_check->fetchColumn();
+        if ($count > 0) {
+            $error = "Username or email already taken.";
+        } else {
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            $stmt_insert = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+            if ($stmt_insert->execute([$username, $email, $hashed_password])) {
+                // Registration successful, you might want to log the user in directly or redirect to login page
+                $success_message = "Registration successful. Please log in.";
+                // Optionally log in user directly after registration
+                $stmt_login = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+                $stmt_login->execute([$email]);
+                if ($stmt_login->rowCount() > 0) {
+                    $user_login = $stmt_login->fetch(PDO::FETCH_ASSOC);
+                    $_SESSION['user_id'] = $user_login['id'];
+                    header("Location: index.php"); // Redirect to index after successful registration and login
+                    exit;
+                }
+
+            } else {
+                $error = "Registration failed. Please try again.";
+            }
+        }
+    }
+}
+
+
+// Check for remember me cookie on page load (in auth.php is better but for this single file example)
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_user'])) {
+    $user_id = $_COOKIE['remember_user'];
+    $stmt_cookie_login = $pdo->prepare("SELECT id FROM users WHERE id = ?");
+    $stmt_cookie_login->execute([$user_id]);
+    if ($stmt_cookie_login->rowCount() > 0) {
+        $user_cookie = $stmt_cookie_login->fetch(PDO::FETCH_ASSOC);
+        $_SESSION['user_id'] = $user_cookie['id'];
+        header("Location: index.php"); // Auto login and redirect to index
+        exit;
+    } else {
+        // Cookie is invalid, maybe user deleted or does not exist, clear the cookie
+        setcookie('remember_user', '', time() - 3600, '/');
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -107,6 +222,13 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             <?php endif; ?>
 
+            <?php if(isset($success_message)): ?>
+                <div class="bg-green-900 border border-green-700 text-green-400 px-4 py-3 rounded relative mb-4" role="alert">
+                    <strong class="font-bold">Success!</strong>
+                    <span class="block sm:inline"><?= $success_message ?></span>
+                </div>
+            <?php endif; ?>
+
             <form id="loginForm" method="POST" class="space-y-4 animate-fade-in block">
                 <input type="hidden" name="login" value="1">
                 <div>
@@ -118,6 +240,10 @@ if (isset($_SESSION['user_id'])) {
                     <input type="password" id="login_password" name="password"
                            class="input-focus w-full p-3 border border-gray-700 rounded-md bg-gray-700 text-white focus:border-blue-500 focus:outline-none" required
                            placeholder="Password">
+                </div>
+                <div class="flex items-center mb-4">
+                    <input id="remember_me" type="checkbox" name="remember_me" value="1" class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2 ">
+                    <label for="remember_me" class="ml-2 text-sm font-medium text-gray-400">Remember me</label>
                 </div>
                 <button type="submit"
                         class="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">

@@ -40,24 +40,28 @@ $password_error_message = null;
 if (isset($_POST['save_prompt'])) {
     $new_prompt = filter_input(INPUT_POST, 'system_prompt_text', FILTER_SANITIZE_STRING);
 
-    try {
-        $stmtCheckPrompt = $pdo->prepare("SELECT id FROM saved_prompts WHERE user_id = ?");
-        $stmtCheckPrompt->execute([$user_id]);
-        $existingPrompt = $stmtCheckPrompt->fetch(PDO::FETCH_ASSOC);
+    if (strlen($new_prompt) > 500) {
+        $prompt_error_message = "System prompt exceeds the maximum limit of 500 characters.";
+    } else {
+        try {
+            $stmtCheckPrompt = $pdo->prepare("SELECT id FROM saved_prompts WHERE user_id = ?");
+            $stmtCheckPrompt->execute([$user_id]);
+            $existingPrompt = $stmtCheckPrompt->fetch(PDO::FETCH_ASSOC);
 
-        if ($existingPrompt) {
-            // Update existing prompt
-            $stmtUpdatePrompt = $pdo->prepare("UPDATE saved_prompts SET system_prompt_text = ? WHERE user_id = ?");
-            $stmtUpdatePrompt->execute([$new_prompt, $user_id]);
-        } else {
-            // Insert new prompt
-            $stmtInsertPrompt = $pdo->prepare("INSERT INTO saved_prompts (user_id, system_prompt_text) VALUES (?, ?)");
-            $stmtInsertPrompt->execute([$user_id, $new_prompt]);
+            if ($existingPrompt) {
+                // Update existing prompt
+                $stmtUpdatePrompt = $pdo->prepare("UPDATE saved_prompts SET system_prompt_text = ? WHERE user_id = ?");
+                $stmtUpdatePrompt->execute([$new_prompt, $user_id]);
+            } else {
+                // Insert new prompt
+                $stmtInsertPrompt = $pdo->prepare("INSERT INTO saved_prompts (user_id, system_prompt_text) VALUES (?, ?)");
+                $stmtInsertPrompt->execute([$user_id, $new_prompt]);
+            }
+            $prompt_success_message = "System prompt saved successfully!";
+            // $savedSystemPrompt = $new_prompt; // No need to refetch, already updated
+        } catch (PDOException $e) {
+            $prompt_error_message = "Error saving system prompt.";
         }
-        $prompt_success_message = "System prompt saved successfully!";
-        // $savedSystemPrompt = $new_prompt; // No need to refetch, already updated
-    } catch (PDOException $e) {
-        $prompt_error_message = "Error saving system prompt.";
     }
 }
 
@@ -191,6 +195,12 @@ if (isset($_GET['logout'])) {
         .example-prompts-link:hover {
             color: #CBD5E0; /* Gray-300 from Tailwind on hover */
         }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.875rem; /* text-sm from Tailwind */
+            color: #9CA3AF; /* Gray-400 from Tailwind */
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen flex items-center justify-center p-4">
@@ -265,9 +275,11 @@ if (isset($_GET['logout'])) {
                     </h2>
 
                     <div class="mb-4">
-                        <label class="block text-sm text-gray-400 mb-2">Custom System Prompt</label>
-                        <textarea name="system_prompt_text" rows="4"
-                                  class="w-full bg-gray-800/50 border border-gray-600/30 rounded-xl px-4 py-3 text-white input-focus"><?= $savedSystemPrompt ?></textarea>
+                        <label class="block text-sm text-gray-400 mb-2">Custom System Prompt (Max 500 characters)</label>
+                        <textarea name="system_prompt_text" rows="4" maxlength="500"
+                                  class="w-full bg-gray-800/50 border border-gray-600/30 rounded-xl px-4 py-3 text-white input-focus"
+                                  id="system_prompt_text"><?= $savedSystemPrompt ?></textarea>
+                        <div id="charCount" class="char-count"></div>
                         <p class="text-gray-500 text-sm mt-2">This prompt helps guide the AI's behavior. Leave blank for default settings.</p>
                     </div>
 
@@ -390,6 +402,24 @@ if (isset($_GET['logout'])) {
                 this.textContent = 'Hide example prompts';
             }
         });
+
+        const systemPromptTextarea = document.getElementById('system_prompt_text');
+        const charCountDisplay = document.getElementById('charCount');
+
+        systemPromptTextarea.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCountDisplay.textContent = `${currentLength}/500 characters`;
+
+            if (currentLength > 500) {
+                charCountDisplay.style.color = 'red'; // Optionally change color if limit exceeds
+            } else {
+                charCountDisplay.style.color = '#9CA3AF'; // Back to default gray
+            }
+        });
+        // Initialize character count on page load
+        charCountDisplay.textContent = `${systemPromptTextarea.value.length}/500 characters`;
+
+
     </script>
 </body>
 </html>

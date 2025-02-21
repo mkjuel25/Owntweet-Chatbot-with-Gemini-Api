@@ -293,10 +293,16 @@ if (isset($_SESSION['user_id'])) {
                     </button>
                 </li>
                 <li>
+                <a href="user_list.php" class="block p-2 rounded hover:bg-gray-700 flex items-center text-gray-400 hover:text-gray-300"> <!-- Active class for current page -->
+                    <i class='bx bx-list-ul align-middle mr-2'></i> User List
+                </a>
+                </li>
+                <li>
                     <a href="index.php?logout=1" class="block p-2 rounded hover:bg-gray-700 flex items-center text-gray-400 hover:text-gray-300">
                         <i class='bx bx-log-out align-middle mr-2'></i> Logout
                     </a>
                 </li>
+                
             </ul>
         </nav>
     </aside>

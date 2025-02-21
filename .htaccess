@@ -5,5 +5,17 @@
     ErrorDocument 404 /404.html
 </Files> 
 
+RewriteEngine On
+# for index.php 
+RewriteRule ^$ index.php [L]
+
+# for chat.php 
+RewriteRule ^user_list$ user_list.php [L]
+
+# for profile.php 
+RewriteRule ^profile$ profile.php [L]
+# guest.php এর জন্য
+RewriteRule ^guest$ guest.php [L]
+
 # Custom 404 page (optional, point to your desired 404 page)
 ErrorDocument 404 /404.html

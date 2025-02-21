@@ -48,213 +48,251 @@ if (isset($_SESSION['user_id'])) {
         });
       }
     </script>
-    <style>
-        @keyframes typing {
-            0% { opacity: 0.4; }
-            50% { opacity: 1; }
-            100% { opacity: 0.4; }
-        }
-        .typing-dot { animation: typing 1.5s infinite; }
+      <style>
+    @keyframes typing {
+        0% { opacity: 0.4; }
+        50% { opacity: 1; }
+        100% { opacity: 0.4; }
+    }
+    .typing-dot { animation: typing 1.5s infinite; }
 
-        /* Custom Animations */
-        @keyframes slide-in-right {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slide-in-left {
-            from {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* General message styles */
-        .message-animation {
-            animation-duration: 0.5s; /* Increased duration to 0.5s for better visibility on page load */
-            animation-fill-mode: both;
-        }
-
-        /* Specific message animations */
-        .user-message {
-            animation-name: slide-in-right;
-        }
-
-        .bot-message {
-            animation-name: slide-in-left;
-        }
-
-
-        /* Typing Indicator Styles */
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-        }
-         .typing-indicator .typing-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #aaa;
-            border-radius: 50%;
-            margin: 0 2px;
-            animation: typing 1.2s infinite;
-            animation-delay: 0s;
-        }
-          .typing-indicator .typing-dot:nth-child(2) {
-              animation-delay: 0.2s;
-          }
-         .typing-indicator .typing-dot:nth-child(3) {
-              animation-delay: 0.4s;
-          }
-
-        /* Sidebar Styles */
-        aside {
-            height: 100vh; /* Full height */
-            position: fixed; /* Fixed sidebar for desktop */
-            top: 0;
-            left: 0;
-            z-index: 30; /* Higher z-index for sidebar */
-            width: 250px; /* Adjust sidebar width as needed */
-            border-right: 1px solid #4B5563; /* Border color from tailwind gray-700 */
-            transform: translateX(-100%); /* Hide sidebar off-screen initially on mobile */
-            transition: transform 0.3s ease-in-out; /* Smooth transition for mobile sidebar */
-        }
-
-        aside.open {
-            transform: translateX(0); /* Slide in sidebar when open class is added */
-        }
-
-        /* Sidebar Backdrop for Mobile */
-        #sidebar-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black backdrop */
-            z-index: 25; /* Below sidebar, above main content */
-            display: none; /* Hidden by default */
+    /* Custom Animations */
+    @keyframes slide-in-right {
+        from {
+            transform: translateX(100%);
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
         }
-
-        #sidebar-backdrop.open {
-            display: block; /* Show backdrop when sidebar is open */
+        to {
+            transform: translateX(0);
             opacity: 1;
         }
+    }
 
-
-        /* Flex container for body to hold sidebar and content side by side */
-        body.flex {
-            display: flex;
+    @keyframes slide-in-left {
+        from {
+            transform: translateX(-100%);
+            opacity: 0;
         }
-
-        .flex-1 { /* If not already defined */
-            flex: 1;
+        to {
+            transform: translateX(0);
+            opacity: 1;
         }
+    }
 
-        /* Responsive adjustments for smaller screens */
-        @media (min-width: 769px) { /* Desktop styles */
-            aside {
-                position: sticky; /* Make sidebar sticky on desktop */
-                transform: translateX(0); /* Always show sidebar on desktop */
-            }
-            #sidebar-backdrop {
-                display: none !important; /* Never show backdrop on desktop */
-            }
+    /* General message styles */
+    .message-animation {
+        animation-duration: 0.5s; /* Increased duration to 0.5s for better visibility on page load */
+        animation-fill-mode: both;
+    }
+
+    /* Specific message animations */
+    .user-message {
+        animation-name: slide-in-right;
+    }
+
+    .bot-message {
+        animation-name: slide-in-left;
+        /* left: 0;  Remove if you tested before and it didn't work as expected */
+    }
+
+    .bot-message .max-w-[90%] { /* Targeting the container holding the message content */
+        /* margin-left: -10px; Adjust this value if needed - Removed negative margin */
+    }
+
+
+    /* Typing Indicator Styles */
+    .typing-indicator {
+        display: flex;
+        align-items: center;
+    }
+     .typing-indicator .typing-dot {
+        width: 8px;
+        height: 8px;
+        background-color: #aaa;
+        border-radius: 50%;
+        margin: 0 2px;
+        animation: typing 1.2s infinite;
+        animation-delay: 0s;
+    }
+      .typing-indicator .typing-dot:nth-child(2) {
+          animation-delay: 0.2s;
+      }
+     .typing-indicator .typing-dot:nth-child(3) {
+          animation-delay: 0.4s;
+      }
+
+    /* Sidebar Styles */
+    aside {
+        height: 100vh; /* Full height */
+        position: fixed; /* Fixed sidebar for desktop */
+        top: 0;
+        left: 0;
+        z-index: 30; /* Higher z-index for sidebar */
+        width: 250px; /* Adjust sidebar width as needed */
+        border-right: 1px solid #4B5563; /* Border color from tailwind gray-700 */
+        transform: translateX(-100%); /* Hide sidebar off-screen initially on mobile */
+        transition: transform 0.3s ease-in-out; /* Smooth transition for mobile sidebar */
+    }
+
+    aside.open {
+        transform: translateX(0); /* Slide in sidebar when open class is added */
+    }
+
+    /* Sidebar Backdrop for Mobile */
+    #sidebar-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black backdrop */
+        z-index: 25; /* Below sidebar, above main content */
+        display: none; /* Hidden by default */
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #sidebar-backdrop.open {
+        display: block; /* Show backdrop when sidebar is open */
+        opacity: 1;
+    }
+
+
+    /* Flex container for body to hold sidebar and content side by side */
+    body.flex {
+        display: flex;
+    }
+
+    .flex-1 { /* If not already defined */
+        flex: 1;
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (min-width: 769px) { /* Desktop styles */
+        aside {
+            position: sticky; /* Make sidebar sticky on desktop */
+            transform: translateX(0); /* Always show sidebar on desktop */
         }
-
-        @media (max-width: 768px) { /* Mobile styles */
-            #chat-container {
-                margin-left: 0; /* Reset margin for small screens */
-                padding-top: 80px; /* Adjusted padding for fixed header */
-                padding-bottom: 120px; /* Adjusted padding for fixed input area */
-            }
-             body.sidebar-open #chat-container {
-                margin-left: 0; /* No margin on mobile when sidebar is open, it overlays */
-            }
+        #sidebar-backdrop {
+            display: none !important; /* Never show backdrop on desktop */
         }
-
-        /* Short Pre-loader Animation Styles */
-        #preloader-animation {
-            position: fixed;
-            top: 0;
+        .input-area-fixed {
+            margin-left: 250px; /* Shift input area to the right of the sidebar */
             left: 0;
             right: 0;
-            bottom: 0;
-            background-color: #111827; /* bg-gray-900 from tailwind */
-            z-index: 9999; /* Make sure it's on top */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column; /* To center text below spinner */
-            animation: fadeOutPreloader 0.5s forwards 0.5s; /* Fade out after 0.5s delay, total 1s */
-            opacity: 1; /* Start as fully opaque */
         }
-
-        .loader {
-            border: 8px solid #f3f3f3; /* Light grey */
-            border-top: 8px solid #3498db; /* Blue */
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 2s linear infinite;
-            margin-bottom: 20px; /* Space between spinner and text */
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #preloader-text {
-            color: #fff; /* White text color */
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        @keyframes fadeOutPreloader {
-            to {
-                opacity: 0;
-                visibility: hidden; /* To fully remove from layout after animation */
-            }
-        }
-
-        /* Fixed Header and Input Styles */
-        .header-fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 20;
-        }
-
-        /*.input-area-fixed {  Removed fixed positioning from input area */
-        /*    position: fixed;*/
-        /*    bottom: 0;*/
-        /*    left: 0;*/
-        /*    right: 0;*/
-        /*    z-index: 20;*/
-        /*    background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800/50 fallback if backdrop-blur is not supported */
-        /*    backdrop-filter: blur(10px); /* backdrop-blur-sm equivalent */
-        /*}*/
-
         #chat-container {
-            padding-top: 80px; /* Adjust based on header height */
-            padding-bottom: 120px; /* Adjust based on input area height */
+            padding-left: ; /* Make space for fixed sidebar */
+            align-items: flex-start; /* বাম দিকে সারিবদ্ধ করার জন্য এই লাইন যোগ করুন */
+            width: 100%; /* Ensure full width in desktop view */
         }
 
+        /* Force bot messages to the left edge on desktop */
+        .bot-message {
+            justify-content: flex-start; /* Ensure they are justified to the start */
+        }
+        .bot-message .max-w-[90%] {
+            margin-left: 0; /* Reset any potential left margin */
+        }
+         .bot-message > div { /* Target the direct child div of .bot-message which is max-w-[90%] */
+            margin-left: 0 !important; /* Forcefully reset margin if any */
+            padding-left: 0 !important; /* Forcefully reset padding if any */
+        }
+    }
 
-    </style>
+    @media (max-width: 768px) { /* Mobile styles */
+        #chat-container {
+            margin-left: 0; /* Reset margin for small screens */
+            padding-top: 80px; /* Adjusted padding for fixed header */
+            padding-bottom: 120px; /* Adjusted padding for fixed input area */
+             align-items: flex-start; /* বাম দিকে সারিবদ্ধ করার জন্য এই লাইন যোগ করুন */
+             width: 100%; /* Ensure full width in mobile view */
+        }
+         body.sidebar-open #chat-container {
+            margin-left: 0; /* No margin on mobile when sidebar is open, it overlays */
+        }
+
+        /* Mobile specific bot message alignment */
+        .bot-message .max-w-[90%] {
+            margin-left: 0; /* Reset left margin */
+            padding-left: 0; /* Reset left padding */
+        }
+    }
+
+    /* Short Pre-loader Animation Styles */
+    #preloader-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #111827; /* bg-gray-900 from tailwind */
+        z-index: 9999; /* Make sure it's on top */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column; /* To center text below spinner */
+        animation: fadeOutPreloader 0.5s forwards 0.5s; /* Fade out after 0.5s delay, total 1s */
+        opacity: 1; /* Start as fully opaque */
+    }
+
+    .loader {
+        border: 8px solid #f3f3f3; /* Light grey */
+        border-top: 8px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite;
+        margin-bottom: 20px; /* Space between spinner and text */
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    #preloader-text {
+        color: #fff; /* White text color */
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    @keyframes fadeOutPreloader {
+        to {
+            opacity: 0;
+            visibility: hidden; /* To fully remove from layout after animation */
+        }
+    }
+
+    /* Fixed Header and Input Styles */
+    .header-fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
+    }
+
+    .input-area-fixed {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        background-color: rgba(31, 41, 55, 0.5); /* bg-gray-800/50 fallback if backdrop-blur is not supported */
+        backdrop-filter: blur(10px); /* backdrop-blur-sm equivalent */
+    }
+
+    #chat-container {
+        padding-top: 80px; /* Adjust based on header height */
+        padding-bottom: 120px; /* Adjust based on input area height */
+         align-items: flex-start; /* বাম দিকে সারিবদ্ধ করার জন্য এই লাইন যোগ করুন */
+         width: 100%; /* Ensure full width in base style */
+    }
+
+
+</style>
+
 </head>
 <body class="bg-gradient-to-br from-gray-900 to-gray-800 h-screen flex">
 
@@ -302,7 +340,7 @@ if (isset($_SESSION['user_id'])) {
                         <i class='bx bx-log-out align-middle mr-2'></i> Logout
                     </a>
                 </li>
-                
+
             </ul>
         </nav>
     </aside>
@@ -354,7 +392,8 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </div>
-<!-- Don't Remove this Duplicate response, it's showing need-->
+
+                <!-- Don't Remove this Duplicate response, it's showing need-->
             <div class="flex justify-start mb-4 message-animation bot-message">  <!-- Added message-animation and bot-message classes here -->
                 <div class="max-w-[90%] md:max-w-[70%]">
                     <div class="bg-gray-700 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-none">
@@ -379,8 +418,8 @@ if (isset($_SESSION['user_id'])) {
         </div>
 
         <!-- Input Area -->
-        <div class="bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 p-4"> <!-- Removed input-area-fixed class -->
-            <form id="chat-form" class="flex gap-3 items-center">
+        <div class="input-area-fixed bg-gray-800/50 backdrop-blur-sm border-t border-gray-700 p-4">
+            <form id="chat-form" class=" flex gap-3 items-center">
                 <div class="flex-1 relative">
                     <textarea id="message-input"
                         class="w-full bg-gray-700/50 border border-gray-600 rounded-2xl py-3 px-5 pr-12
